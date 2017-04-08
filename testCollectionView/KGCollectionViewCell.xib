@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -19,7 +19,7 @@
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9to-Ld-k07">
-                        <rect key="frame" x="5" y="13" width="437" height="327"/>
+                        <rect key="frame" x="5" y="13" width="437" height="337"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -37,7 +37,7 @@
                         </userDefinedRuntimeAttributes>
                     </view>
                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sne-Yu-hye" userLabel="Container">
-                        <rect key="frame" x="0.0" y="5" width="447" height="350"/>
+                        <rect key="frame" x="0.0" y="5" width="447" height="360"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Card" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1yw-Y6-s1d">
                                 <rect key="frame" x="10" y="10" width="427" height="21"/>
@@ -52,10 +52,10 @@
                                 </constraints>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1IF-YD-cbo">
-                                <rect key="frame" x="3" y="181" width="441" height="169"/>
+                                <rect key="frame" x="3" y="181" width="441" height="179"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Container" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mcj-vz-Qys">
-                                        <rect key="frame" x="183.5" y="74" width="74.5" height="21"/>
+                                        <rect key="frame" x="183.5" y="79" width="74.5" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -89,19 +89,19 @@
                     </view>
                 </subviews>
             </view>
-            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="sne-Yu-hye" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="GNl-Fb-ptM"/>
                 <constraint firstItem="9to-Ld-k07" firstAttribute="top" secondItem="sne-Yu-hye" secondAttribute="top" constant="8" id="Gh0-ev-TO4"/>
                 <constraint firstItem="sne-Yu-hye" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="5" id="ISM-qS-K8d"/>
                 <constraint firstItem="9to-Ld-k07" firstAttribute="bottom" secondItem="sne-Yu-hye" secondAttribute="bottom" constant="-15" id="SGr-pI-23D"/>
                 <constraint firstAttribute="trailing" secondItem="sne-Yu-hye" secondAttribute="trailing" id="Tac-K0-y1s"/>
-                <constraint firstAttribute="bottom" secondItem="sne-Yu-hye" secondAttribute="bottom" constant="10" id="V1o-Lp-hKX"/>
+                <constraint firstAttribute="bottom" secondItem="sne-Yu-hye" secondAttribute="bottom" id="V1o-Lp-hKX"/>
                 <constraint firstItem="9to-Ld-k07" firstAttribute="leading" secondItem="sne-Yu-hye" secondAttribute="leading" constant="5" id="v2i-de-umG"/>
                 <constraint firstItem="9to-Ld-k07" firstAttribute="trailing" secondItem="sne-Yu-hye" secondAttribute="trailing" constant="-5" id="wNA-vg-rAv"/>
             </constraints>
             <size key="customSize" width="447" height="365"/>
             <connections>
+                <outlet property="label" destination="Mcj-vz-Qys" id="QYb-Vg-ZaY"/>
                 <outlet property="shadedView" destination="9to-Ld-k07" id="gmt-Ik-5Mb"/>
             </connections>
             <point key="canvasLocation" x="-75.5" y="65.5"/>
