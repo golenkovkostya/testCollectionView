@@ -15,6 +15,11 @@ typedef struct
     
     // Top flexible inset
     CGFloat flexibleTop;
+    
+    CGFloat headerHeight;
+    
+    CGFloat bottomCardVisibleHeight;
+    
     // The visible size of each card in the normal stack
     CGFloat minimumVisibleHeight;
     // The visible size of each card in the bottom stack
@@ -25,16 +30,3 @@ typedef struct
     // This value is calculated internally
     CGFloat visibleHeight;
 } MTCardLayoutMetrics;
-
-typedef struct
-{
-    /// How much of the pulling is translated into movement on the top. An inheritance of 0 disables this feature (same as bouncesTop)
-    CGFloat inheritance;
-    
-    /// Allows for bouncing when reaching the top
-    BOOL bouncesTop;
-    
-    /// Allows the cards get "stuck" on the top, instead of just scrolling outside
-    BOOL sticksTop;
-    
-} MTCardLayoutEffects;

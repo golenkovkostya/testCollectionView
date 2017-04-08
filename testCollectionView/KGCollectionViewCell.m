@@ -8,7 +8,7 @@
 
 #import "KGCollectionViewCell.h"
 
-@interface KGCollectionViewCell()
+@interface KGCollectionViewCell ()
 
 @property (weak, nonatomic) IBOutlet UIView *shadedView;
 

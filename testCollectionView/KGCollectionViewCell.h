@@ -10,6 +10,8 @@
 
 @interface KGCollectionViewCell : UICollectionViewCell
 
+@property (weak, nonatomic) IBOutlet UILabel *label;
+
 + (UINib *)nib;
 
 @end

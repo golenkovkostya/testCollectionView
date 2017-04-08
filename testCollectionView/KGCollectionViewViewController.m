@@ -17,6 +17,7 @@ static NSString * const kHeaderId = @"header";
 @interface KGCollectionViewViewController () <UICollectionViewDelegate, UICollectionViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (nonatomic, strong) NSArray *sections;
 
 @end
 
@@ -25,8 +26,10 @@ static NSString * const kHeaderId = @"header";
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-     [self.collectionView registerNib:[KGCollectionViewCell nib] forCellWithReuseIdentifier:kCellId];
+    [self.collectionView registerNib:[KGCollectionViewCell nib] forCellWithReuseIdentifier:kCellId];
     [self.collectionView registerNib:[KGSectionHeaderView nib] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kHeaderId];
+    
+    self.sections = @[ @10, @15, @1, @25, @50, @1 ];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -36,21 +39,27 @@ static NSString * const kHeaderId = @"header";
 
 #pragma mark <UICollectionViewDataSource>
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 1;
+    return self.sections.count;
 }
 
-
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 10;
+    return [self.sections[section] integerValue];
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     KGSectionHeaderView *view = (KGSectionHeaderView *)[collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:kHeaderId forIndexPath:indexPath];
+    
+    NSString *text = indexPath.section ? @"Карты друзей" : @"Ваши карты";
+    
+    view.label.text = text;
+    
     return view;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     KGCollectionViewCell *cell = (KGCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:kCellId forIndexPath:indexPath];
+    
+    cell.label.text = [NSString stringWithFormat:@"Карточка №%ld", (long)indexPath.item + 1];
     return cell;
 }
 

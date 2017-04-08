@@ -10,6 +10,8 @@
 
 @interface KGSectionHeaderView : UICollectionReusableView
 
+@property (weak, nonatomic) IBOutlet UILabel *label;
+
 + (UINib *)nib;
 
 @end
