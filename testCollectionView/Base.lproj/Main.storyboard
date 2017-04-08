@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="UU4-pd-Gdt">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="p3M-AW-iJw">
+            <objects>
+                <navigationController id="UU4-pd-Gdt" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="6eL-8o-OhB">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="Sc5-VS-FgZ" kind="relationship" relationship="rootViewController" id="p14-23-USN"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8PS-yC-hpY" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-479" y="54"/>
+        </scene>
+        <!--nav bar-->
+        <scene sceneID="rG4-Uz-LYe">
+            <objects>
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="Sc5-VS-FgZ" customClass="KGCollectionViewViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="yqX-94-qiv"/>
+                        <viewControllerLayoutGuide type="bottom" id="ibr-uT-6WJ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="yGW-zt-7mA">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Background image" translatesAutoresizingMaskIntoConstraints="NO" id="B2f-3b-4ND">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </imageView>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" prefetchingEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GBE-ig-oxC">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <collectionViewLayout key="collectionViewLayout" id="o4Q-y6-BgN" customClass="MTCardLayout"/>
+                                <cells/>
+                                <connections>
+                                    <outlet property="dataSource" destination="Sc5-VS-FgZ" id="Si5-kg-XMM"/>
+                                    <outlet property="delegate" destination="Sc5-VS-FgZ" id="6Z4-oG-G1o"/>
+                                </connections>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="GBE-ig-oxC" firstAttribute="leading" secondItem="yGW-zt-7mA" secondAttribute="leading" id="4Lf-Ns-XYe"/>
+                            <constraint firstItem="ibr-uT-6WJ" firstAttribute="top" secondItem="B2f-3b-4ND" secondAttribute="bottom" id="A4e-5E-fLh"/>
+                            <constraint firstAttribute="trailing" secondItem="B2f-3b-4ND" secondAttribute="trailing" id="FO7-lc-Tlw"/>
+                            <constraint firstItem="ibr-uT-6WJ" firstAttribute="top" secondItem="GBE-ig-oxC" secondAttribute="bottom" id="HsJ-eW-9JB"/>
+                            <constraint firstItem="B2f-3b-4ND" firstAttribute="top" secondItem="yqX-94-qiv" secondAttribute="bottom" constant="-64" id="QVA-Gg-1a0"/>
+                            <constraint firstAttribute="trailing" secondItem="GBE-ig-oxC" secondAttribute="trailing" id="YOe-up-kYF"/>
+                            <constraint firstItem="B2f-3b-4ND" firstAttribute="leading" secondItem="yGW-zt-7mA" secondAttribute="leading" id="fbG-Uz-JZ5"/>
+                            <constraint firstItem="GBE-ig-oxC" firstAttribute="top" secondItem="yqX-94-qiv" secondAttribute="bottom" id="gsV-vc-o0p"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="nav bar" id="pIM-kP-csc"/>
+                    <connections>
+                        <outlet property="collectionView" destination="GBE-ig-oxC" id="Gra-31-6RV"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VoB-He-83K" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="553" y="54"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="Background image" width="375" height="667"/>
+    </resources>
+</document>
