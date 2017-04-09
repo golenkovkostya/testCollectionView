@@ -1,6 +1,7 @@
 #import <objc/runtime.h>
 #import "UICollectionView+CardLayout.h"
 #import "MTCardLayoutHelper.h"
+#import "MTCardLayout.h"
 
 static const char MTCardLayoutHelperKey;
 
@@ -38,13 +39,36 @@ static const char MTCardLayoutHelperKey;
     };
 
     if (animated) {
-        [self performBatchUpdates:^{
-            setPresenting();
-        } completion:^(BOOL finished) {
-            if (completion) {
-                completion(finished);
-            }
-        }];
+        void (^animatedUpdate)() = ^{
+            [self performBatchUpdates:^{
+                setPresenting();
+            } completion:^(BOOL finished) {
+                if (completion) {
+                    completion(finished);
+                }
+            }];
+        };
+        
+        if (viewMode == MTCardLayoutViewModeDefault) {
+            // because we can't animate changing selected card height from inside of MTCardLayout
+            // we'll do it here and animate changes in the rest of cards afterwards
+            NSIndexPath *selectedIndexPath = [[self indexPathsForSelectedItems] firstObject];
+            UICollectionViewCell *selectedCell = [self cellForItemAtIndexPath:selectedIndexPath];
+            
+            [UIView animateWithDuration:0.3 animations:^{
+                CGRect frame = selectedCell.frame;
+                MTCardLayout *layout = (MTCardLayout *)self.collectionViewLayout;
+                frame = [layout layoutAttributesForItemAtIndexPath:selectedIndexPath viewMode:viewMode].frame;
+                selectedCell.frame = frame;
+                [selectedCell layoutIfNeeded];
+                
+            } completion:^(BOOL finished) {
+                animatedUpdate();
+            }];
+            
+        } else {
+            animatedUpdate();
+        }
     } else {
         setPresenting();
         [self.collectionViewLayout invalidateLayout];

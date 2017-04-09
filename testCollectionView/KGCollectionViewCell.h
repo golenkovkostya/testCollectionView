@@ -11,6 +11,7 @@
 @interface KGCollectionViewCell : UICollectionViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *label;
+@property (weak, nonatomic) IBOutlet UILabel *title;
 
 + (UINib *)nib;
 

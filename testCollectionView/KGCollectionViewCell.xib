@@ -103,6 +103,7 @@
             <connections>
                 <outlet property="label" destination="Mcj-vz-Qys" id="QYb-Vg-ZaY"/>
                 <outlet property="shadedView" destination="9to-Ld-k07" id="gmt-Ik-5Mb"/>
+                <outlet property="title" destination="1yw-Y6-s1d" id="0ks-28-YsJ"/>
             </connections>
             <point key="canvasLocation" x="-75.5" y="65.5"/>
         </collectionViewCell>

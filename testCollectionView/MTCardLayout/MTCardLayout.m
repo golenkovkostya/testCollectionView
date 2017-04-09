@@ -227,7 +227,8 @@
     attributes.zIndex = indexPath.item + 1;
     attributes.transform3D = CATransform3DMakeTranslation(0, 0, indexPath.item * 0.0001);
     
-    if (self.collectionView.viewMode == MTCardLayoutViewModePresenting) {
+    
+    if (viewMode == MTCardLayoutViewModePresenting) {
         NSIndexPath *selectedIndexPath = [[self.collectionView indexPathsForSelectedItems] firstObject];
         
         if (selectedIndexPath && [selectedIndexPath isEqual:indexPath]) {
@@ -308,7 +309,7 @@ CGRect frameForSelectedCard(CGRect b, UIEdgeInsets contentInset, MTCardLayoutMet
 /*
  * Unselected cells. 
  * Cells from the same section are moved to the bottom stack (used when there is selected cell). Their height is `m.stackedVisibleHeight`,
- * Cells from the previous section are moved up to the top screen edge with height 0.
+ * Cells from the previous section are moved up behind the top screen edge.
  * Cells from the next section are moved down to the bottom screen edge with the height 0.
  */
 - (CGRect)frameForUnselectedCard:(NSIndexPath *)indexPath {

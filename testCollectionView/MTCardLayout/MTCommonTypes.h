@@ -16,8 +16,10 @@ typedef struct
     // Top flexible inset
     CGFloat flexibleTop;
     
+    // height for section header
     CGFloat headerHeight;
     
+    // visible height for section bottom card
     CGFloat bottomCardVisibleHeight;
     
     // The visible size of each card in the normal stack
