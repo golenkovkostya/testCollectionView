@@ -7,7 +7,7 @@
 
 @interface MTCardLayout ()
 
-@property (nonatomic, strong) NSIndexPath *firstVisibleIndexPath;
+@property (nonatomic, strong) NSIndexPath *firstVisibleIndexPath;  // hacky way to track order in which cards should collapse
 
 @end
 
@@ -52,6 +52,8 @@
     if (invalidate) {
         [self invalidateLayout];
     }
+    
+    _firstVisibleIndexPath = nil;
 }
 
 - (void)dealloc {
@@ -187,6 +189,7 @@
     attributes.transform3D = CATransform3DMakeTranslation(0, 0, indexPath.item * 0.0001);
     
     if (self.collectionView.viewMode == MTCardLayoutViewModePresenting) {
+        // setting ref to first visible card after switching to MTCardLayoutViewModePresenting
         self.firstVisibleIndexPath = self.firstVisibleIndexPath ?: indexPath;
         
         if (selectedIndexPath && [selectedIndexPath isEqual:indexPath]) {
@@ -201,9 +204,11 @@
         }
     
     } else {
-        self.firstVisibleIndexPath = nil;
         // stack mode
-    
+
+        // we're not in MTCardLayoutViewModePresenting so we'll null this ref until the next time
+        self.firstVisibleIndexPath = nil;
+        
         // Layout collapsed cells (collapsed size)
         CGRect sectionFrame = [self frameForSectionAtIndex:indexPath.section];
 
@@ -264,14 +269,7 @@ CGRect frameForCardAtIndex(NSIndexPath *indexPath, CGRect b, UIEdgeInsets conten
  * Selected cell, full height
  */
 CGRect frameForSelectedCard(CGRect b, UIEdgeInsets contentInset, MTCardLayoutMetrics m, BOOL singleCard) {
-    
-    UIEdgeInsets insets = m.presentingInsets;
-    if (singleCard) {
-        // when card is single in the section it should go all the way down
-        insets.bottom = 0;
-    }
-    
-    return UIEdgeInsetsInsetRect(UIEdgeInsetsInsetRect(b, contentInset), insets);
+    return UIEdgeInsetsInsetRect(UIEdgeInsetsInsetRect(b, contentInset), m.presentingInsets);
 }
 
 /*
