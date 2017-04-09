@@ -59,6 +59,7 @@ static NSString * const kHeaderId = @"header";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     KGCollectionViewCell *cell = (KGCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:kCellId forIndexPath:indexPath];
     
+    cell.title.text = [NSString stringWithFormat:@"%ld-%ld", (long)indexPath.section + 1, (long)indexPath.item + 1];
     cell.label.text = [NSString stringWithFormat:@"Карточка №%ld", (long)indexPath.item + 1];
     return cell;
 }

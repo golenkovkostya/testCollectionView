@@ -5,4 +5,6 @@
 
 @property (nonatomic, assign) MTCardLayoutMetrics metrics;
 
+- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath
+                                                                viewMode:(MTCardLayoutViewMode)viewMode;
 @end
