@@ -95,7 +95,7 @@
                 <constraint firstItem="sne-Yu-hye" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="5" id="ISM-qS-K8d"/>
                 <constraint firstItem="9to-Ld-k07" firstAttribute="bottom" secondItem="sne-Yu-hye" secondAttribute="bottom" constant="-15" id="SGr-pI-23D"/>
                 <constraint firstAttribute="trailing" secondItem="sne-Yu-hye" secondAttribute="trailing" id="Tac-K0-y1s"/>
-                <constraint firstAttribute="bottom" secondItem="sne-Yu-hye" secondAttribute="bottom" id="V1o-Lp-hKX"/>
+                <constraint firstAttribute="bottom" secondItem="sne-Yu-hye" secondAttribute="bottom" priority="999" id="V1o-Lp-hKX"/>
                 <constraint firstItem="9to-Ld-k07" firstAttribute="leading" secondItem="sne-Yu-hye" secondAttribute="leading" constant="5" id="v2i-de-umG"/>
                 <constraint firstItem="9to-Ld-k07" firstAttribute="trailing" secondItem="sne-Yu-hye" secondAttribute="trailing" constant="-5" id="wNA-vg-rAv"/>
             </constraints>

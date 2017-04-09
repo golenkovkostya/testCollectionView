@@ -49,7 +49,7 @@ static NSString * const kHeaderId = @"header";
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     KGSectionHeaderView *view = (KGSectionHeaderView *)[collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:kHeaderId forIndexPath:indexPath];
     
-    NSString *text = indexPath.section ? @"Карты друзей" : @"Ваши карты";
+    NSString *text = indexPath.section ? [NSString stringWithFormat:@"Карты друзей #%ld", (long)indexPath.section] : @"Ваши карты";
     
     view.label.text = text;
     
