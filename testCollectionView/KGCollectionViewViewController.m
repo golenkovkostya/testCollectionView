@@ -29,7 +29,7 @@ static NSString * const kHeaderId = @"header";
     [self.collectionView registerNib:[KGCollectionViewCell nib] forCellWithReuseIdentifier:kCellId];
     [self.collectionView registerNib:[KGSectionHeaderView nib] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kHeaderId];
     
-    self.sections = @[ @10, @15, @1, @25, @50, @1 ];
+    self.sections = @[ @10, @15, @1, @25, @50, @1, @2, @3 ];
 }
 
 - (void)didReceiveMemoryWarning {
