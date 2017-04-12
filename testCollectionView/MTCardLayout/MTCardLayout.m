@@ -18,6 +18,8 @@ typedef struct {
 @property (nonatomic, strong) NSMutableDictionary *sectionFramesCache;  // cache section frame calculations inside one layout invalidation call
 @property (nonatomic, assign) CollectionSizeCache collectionSizeCache;  // cache collection size calculations while it's items number or offsets are not changed
 
+@property (nonatomic, strong) NSMutableDictionary *collapsedCardFramesCache;  // cache collapsed card frames calculations while collection items number or offsets are not changed
+
 @end
 
 @implementation MTCardLayout
@@ -46,6 +48,7 @@ typedef struct {
 
 - (void)useDefaultMetricsAndInvalidate:(BOOL)invalidate {
     MTCardLayoutMetrics m;
+    MTCardLayoutEffects e;
  
     m.presentingInsets = UIEdgeInsetsMake(00, 0, 44, 0);
     m.listingInsets = UIEdgeInsetsMake(0, 0, 0, 0);
@@ -56,13 +59,18 @@ typedef struct {
     m.bottomCardVisibleHeight = 250;
     m.headerHeight = 44;
     
+    e.inheritance = 0.15;
+    e.bouncesTop = YES;
+    
     _metrics = m;
+    _effects = e;
     
     if (invalidate) {
         [self invalidateLayout];
     }
     
     // caches init
+    _collapsedCardFramesCache = [[NSMutableDictionary alloc] init];
     _sectionFramesCache = [[NSMutableDictionary alloc] init];
     _collectionSizeCache.size = CGSizeZero;
     _collectionSizeCache.emptyHeight = 0;
@@ -208,9 +216,29 @@ typedef struct {
     
     maxCellIndex = MIN(maxCellIndex, currentSectionItemsNum);
     
+    // collect section cards frames
     for (NSUInteger item = minCellIndex; item < maxCellIndex; item++) {
         [cells addObject:[self layoutAttributesForItemAtIndexPath:[NSIndexPath indexPathForItem:item inSection:sectionIndex]
                                                          viewMode:self.collectionView.viewMode]];
+    }
+    
+    // check if we need to apply bouncing effect
+    MTCardLayoutEffects e = _effects;
+    CGRect b = self.collectionView.bounds;
+    UIEdgeInsets contentInset = self.collectionView.contentInset;
+    NSInteger index = 0;
+    CGRect f;
+    if (sectionIndex == 0 && e.bouncesTop && b.origin.y + contentInset.top < 0 &&
+        self.collectionView.viewMode == MTCardLayoutViewModeDefault && e.inheritance > 0.0) {
+        
+        // bouncing only needs to be applied for cards in first section in default mode
+        for (UICollectionViewLayoutAttributes *cellAttrs in cells) {
+            f = cellAttrs.frame;
+            f.origin.y -= (b.origin.y + contentInset.top) * index * e.inheritance;
+            cellAttrs.frame = f;
+            index++;
+        }
+        
     }
     
     return cells;
@@ -278,14 +306,23 @@ typedef struct {
     } else {
         // stack mode
         
-        // Layout collapsed cells (collapsed size)
-        CGRect sectionFrame = [self frameForSectionAtIndex:indexPath.section];
-
-        attributes.frame = frameForCardAtIndex(indexPath,
-                                               self.collectionView.bounds,
-                                               self.collectionView.contentInset,
-                                               _metrics,
-                                               sectionFrame);
+        NSValue *cardFrameCachedObj = self.collapsedCardFramesCache[indexPath];
+        if (cardFrameCachedObj) {
+            // user frame value from cache
+            attributes.frame = [cardFrameCachedObj CGRectValue];
+        
+        } else {
+            // Layout collapsed cells (collapsed size)
+            CGRect sectionFrame = [self frameForSectionAtIndex:indexPath.section];
+            
+            attributes.frame = frameForCardAtIndex(indexPath,
+                                                   self.collectionView.bounds,
+                                                   self.collectionView.contentInset,
+                                                   _metrics,
+                                                   sectionFrame);
+            
+            self.collapsedCardFramesCache[indexPath] = [NSValue valueWithCGRect:attributes.frame];
+        }
     }
     
     attributes.hidden = attributes.frame.size.height == 0;
@@ -318,6 +355,9 @@ typedef struct {
     for (NSInteger i = 0; i < sectionsNum; i++) {
         sectionsHeight += [self frameForSectionAtIndex:i].size.height;
     }
+    
+    // collection size changed, updating caches
+    self.collapsedCardFramesCache = [[NSMutableDictionary alloc] init];
     
     CollectionSizeCache resultSize = {.size = CGSizeMake(bounds.size.width, sectionsHeight + emptyHeight),
                                       .emptyHeight = emptyHeight,
