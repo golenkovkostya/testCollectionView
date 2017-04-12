@@ -7,6 +7,12 @@
 
 @end
 
+@interface MTCardLayout ()
+
+@property (nonatomic, strong) NSMutableDictionary *sectionFramesCache;
+
+@end
+
 @implementation MTCardLayout
 
 #pragma mark - Initialization
@@ -48,6 +54,8 @@
     if (invalidate) {
         [self invalidateLayout];
     }
+    
+    _sectionFramesCache = [[NSMutableDictionary alloc] init];
 }
 
 - (void)dealloc {
@@ -66,7 +74,8 @@
 
 - (void)prepareLayout {
     [super prepareLayout];
-	_metrics.visibleHeight = _metrics.minimumVisibleHeight;    
+    _metrics.visibleHeight = _metrics.minimumVisibleHeight;
+    _sectionFramesCache = [[NSMutableDictionary alloc] init];
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -114,9 +123,22 @@
     
     NSMutableArray *cells = [[NSMutableArray alloc] init];
     NSInteger sectionsNum = [self.collectionView numberOfSections];
+    
+    NSInteger cellNum = cells.count;
+    BOOL visibleSectionsProcessed = NO;
     for (NSInteger sectionIndex = 0; sectionIndex < sectionsNum; sectionIndex++) {
+        
         [cells addObjectsFromArray:[self elementsVisibleInRect:rect
                                              forSectionAtIndex:sectionIndex]];
+        
+        // optimization to stop processing after first invisible section
+        if (cells.count != cellNum) {
+            visibleSectionsProcessed = YES;
+        }
+        
+        if (visibleSectionsProcessed && cells.count == cellNum) {
+            break;
+        }
     }
     
     return cells;
@@ -364,6 +386,11 @@ CGRect frameForSelectedCard(CGRect b, UIEdgeInsets contentInset, MTCardLayoutMet
  */
 - (CGRect)frameForSectionAtIndex:(NSInteger)sectionIndex {
     
+    NSValue *cachedFrameObj = self.sectionFramesCache[@(sectionIndex)];
+    if (cachedFrameObj) {
+        return [cachedFrameObj CGRectValue];
+    }
+    
     MTCardLayoutMetrics m = _metrics;
     CGRect b = self.collectionView.bounds;
     UIEdgeInsets contentInset = self.collectionView.contentInset;
@@ -382,6 +409,9 @@ CGRect frameForSelectedCard(CGRect b, UIEdgeInsets contentInset, MTCardLayoutMet
     
     CGRect previousSectionFrame = [self frameForSectionAtIndex:(sectionIndex - 1)];
     f.origin.y = previousSectionFrame.origin.y + previousSectionFrame.size.height;
+    
+    self.sectionFramesCache[@(sectionIndex)] = [NSValue valueWithCGRect:f];
+    
     return f;
 }
 
