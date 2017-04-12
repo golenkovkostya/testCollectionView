@@ -150,6 +150,8 @@ typedef struct {
         if (visibleSectionsProcessed && cells.count == cellNum) {
             break;
         }
+        
+        cellNum = cells.count;
     }
     
     return cells;
