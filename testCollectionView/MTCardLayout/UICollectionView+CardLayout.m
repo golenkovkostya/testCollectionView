@@ -56,9 +56,10 @@ static const char MTCardLayoutHelperKey;
             UICollectionViewCell *selectedCell = [self cellForItemAtIndexPath:selectedIndexPath];
             
             [UIView animateWithDuration:0.3 animations:^{
-                CGRect frame = selectedCell.frame;
+                CGRect frame;
                 MTCardLayout *layout = (MTCardLayout *)self.collectionViewLayout;
                 frame = [layout layoutAttributesForItemAtIndexPath:selectedIndexPath viewMode:viewMode].frame;
+
                 selectedCell.frame = frame;
                 [selectedCell layoutIfNeeded];
                 
