@@ -321,7 +321,10 @@ typedef struct {
                                                    _metrics,
                                                    sectionFrame);
             
-            self.collapsedCardFramesCache[indexPath] = [NSValue valueWithCGRect:attributes.frame];
+            if (indexPath) {
+                // when swiping down card index path can be nil
+                self.collapsedCardFramesCache[indexPath] = [NSValue valueWithCGRect:attributes.frame];
+            }
         }
     }
     
