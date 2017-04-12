@@ -293,8 +293,14 @@ CGRect frameForCardAtIndex(NSIndexPath *indexPath, CGRect b, UIEdgeInsets conten
     
     CGFloat y = sectionFrame.origin.y + m.headerHeight + indexPath.item * m.visibleHeight;
     
+    CGRect selectedFrame = frameForSelectedCard(b, contentInset, m);
+    
     CGRect f = CGRectMake(sectionFrame.origin.x, y,
                           sectionFrame.size.width, sectionFrame.size.height + sectionFrame.origin.y - y);
+    
+    // frame in stack can't be bigger than card height in presentation mode
+    // (happens when section is bigger than screen)
+    f.size.height = MIN(f.size.height, selectedFrame.size.height);
     
     return f;
 }

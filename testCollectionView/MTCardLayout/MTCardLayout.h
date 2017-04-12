@@ -7,4 +7,5 @@
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath
                                                                 viewMode:(MTCardLayoutViewMode)viewMode;
+
 @end
