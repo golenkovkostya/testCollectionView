@@ -1,6 +1,12 @@
 #import "MTCardLayout.h"
 #import "UICollectionView+CardLayout.h"
 
+typedef struct {
+    CGSize size;
+    CGFloat emptyHeight;
+    NSUInteger itemsNum;
+} CollectionSizeCache;
+
 @interface UICollectionView (CardLayoutPrivate)
 
 - (void)cardLayoutCleanup;
@@ -9,7 +15,8 @@
 
 @interface MTCardLayout ()
 
-@property (nonatomic, strong) NSMutableDictionary *sectionFramesCache;
+@property (nonatomic, strong) NSMutableDictionary *sectionFramesCache;  // cache section frame calculations inside one layout invalidation call
+@property (nonatomic, assign) CollectionSizeCache collectionSizeCache;  // cache collection size calculations while it's items number or offsets are not changed
 
 @end
 
@@ -55,7 +62,11 @@
         [self invalidateLayout];
     }
     
+    // caches init
     _sectionFramesCache = [[NSMutableDictionary alloc] init];
+    _collectionSizeCache.size = CGSizeZero;
+    _collectionSizeCache.emptyHeight = 0;
+    _collectionSizeCache.itemsNum = 0;
 }
 
 - (void)dealloc {
@@ -289,14 +300,28 @@
     UIEdgeInsets contentInset = self.collectionView.contentInset;
     NSInteger sectionsNum = [self.collectionView numberOfSections];
     
-    CGFloat totalHeight = (m.flexibleTop + m.listingInsets.top + m.listingInsets.bottom +
+    CGFloat sectionsHeight = 0;
+    CGFloat emptyHeight = (m.flexibleTop + m.listingInsets.top + m.listingInsets.bottom +
                            contentInset.top + contentInset.bottom);
     
+    NSUInteger totalItems = [self totalNumberOfItemsInCollection];
+    
+    if (!CGSizeEqualToSize(self.collectionSizeCache.size, CGSizeZero) &&
+        self.collectionSizeCache.emptyHeight == emptyHeight &&
+        self.collectionSizeCache.itemsNum == totalItems) {
+        // return cached collection size as long as number of items is the same and insets are not changed
+        return self.collectionSizeCache.size;
+    }
+
     for (NSInteger i = 0; i < sectionsNum; i++) {
-        totalHeight += [self frameForSectionAtIndex:i].size.height;
+        sectionsHeight += [self frameForSectionAtIndex:i].size.height;
     }
     
-    return CGSizeMake(bounds.size.width, totalHeight);
+    CollectionSizeCache resultSize = {.size = CGSizeMake(bounds.size.width, sectionsHeight + emptyHeight),
+                                      .emptyHeight = emptyHeight,
+                                      .itemsNum = totalItems};
+    self.collectionSizeCache = resultSize;
+    return self.collectionSizeCache.size;
 }
 
 - (BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds {
@@ -388,6 +413,7 @@ CGRect frameForSelectedCard(CGRect b, UIEdgeInsets contentInset, MTCardLayoutMet
     
     NSValue *cachedFrameObj = self.sectionFramesCache[@(sectionIndex)];
     if (cachedFrameObj) {
+        // return cached section frame
         return [cachedFrameObj CGRectValue];
     }
     
@@ -413,6 +439,19 @@ CGRect frameForSelectedCard(CGRect b, UIEdgeInsets contentInset, MTCardLayoutMet
     self.sectionFramesCache[@(sectionIndex)] = [NSValue valueWithCGRect:f];
     
     return f;
+}
+
+#pragma mark - Utils
+
+- (NSUInteger)totalNumberOfItemsInCollection
+{
+    NSInteger sectionsNum = [self.collectionView numberOfSections];
+    NSUInteger total = 0;
+    for (NSInteger i = 0; i < sectionsNum; i++) {
+        total += [self.collectionView numberOfItemsInSection:i];
+    }
+    
+    return total;
 }
 
 @end
