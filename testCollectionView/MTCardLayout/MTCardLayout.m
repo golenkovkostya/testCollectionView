@@ -18,6 +18,8 @@ typedef struct {
 @property (nonatomic, strong) NSMutableDictionary *sectionFramesCache;  // cache section frame calculations inside one layout invalidation call
 @property (nonatomic, assign) CollectionSizeCache collectionSizeCache;  // cache collection size calculations while it's items number or offsets are not changed
 
+@property (nonatomic, strong) NSMutableDictionary *collapsedCardFramesCache;  // cache collapsed card frames calculations while collection items number or offsets are not changed
+
 @end
 
 @implementation MTCardLayout
@@ -63,6 +65,7 @@ typedef struct {
     }
     
     // caches init
+    _collapsedCardFramesCache = [[NSMutableDictionary alloc] init];
     _sectionFramesCache = [[NSMutableDictionary alloc] init];
     _collectionSizeCache.size = CGSizeZero;
     _collectionSizeCache.emptyHeight = 0;
@@ -278,14 +281,23 @@ typedef struct {
     } else {
         // stack mode
         
-        // Layout collapsed cells (collapsed size)
-        CGRect sectionFrame = [self frameForSectionAtIndex:indexPath.section];
-
-        attributes.frame = frameForCardAtIndex(indexPath,
-                                               self.collectionView.bounds,
-                                               self.collectionView.contentInset,
-                                               _metrics,
-                                               sectionFrame);
+        NSValue *cardFrameCachedObj = self.collapsedCardFramesCache[indexPath];
+        if (cardFrameCachedObj) {
+            // user frame value from cache
+            attributes.frame = [cardFrameCachedObj CGRectValue];
+        
+        } else {
+            // Layout collapsed cells (collapsed size)
+            CGRect sectionFrame = [self frameForSectionAtIndex:indexPath.section];
+            
+            attributes.frame = frameForCardAtIndex(indexPath,
+                                                   self.collectionView.bounds,
+                                                   self.collectionView.contentInset,
+                                                   _metrics,
+                                                   sectionFrame);
+            
+            self.collapsedCardFramesCache[indexPath] = [NSValue valueWithCGRect:attributes.frame];
+        }
     }
     
     attributes.hidden = attributes.frame.size.height == 0;
@@ -318,6 +330,9 @@ typedef struct {
     for (NSInteger i = 0; i < sectionsNum; i++) {
         sectionsHeight += [self frameForSectionAtIndex:i].size.height;
     }
+    
+    // collection size changed, updating caches
+    self.collapsedCardFramesCache = [[NSMutableDictionary alloc] init];
     
     CollectionSizeCache resultSize = {.size = CGSizeMake(bounds.size.width, sectionsHeight + emptyHeight),
                                       .emptyHeight = emptyHeight,
