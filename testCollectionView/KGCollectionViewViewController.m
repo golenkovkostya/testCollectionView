@@ -70,4 +70,8 @@ static NSString * const kHeaderId = @"header";
     [self.collectionView setViewMode:MTCardLayoutViewModePresenting animated:YES completion:nil];
 }
 
+- (IBAction)reloadAction:(id)sender {
+    [self.collectionView reloadData];
+}
+
 @end

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="UU4-pd-Gdt">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="UU4-pd-Gdt">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -63,7 +63,13 @@
                             <constraint firstItem="GBE-ig-oxC" firstAttribute="top" secondItem="yqX-94-qiv" secondAttribute="bottom" id="gsV-vc-o0p"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="nav bar" id="pIM-kP-csc"/>
+                    <navigationItem key="navigationItem" title="nav bar" id="pIM-kP-csc">
+                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="KOt-c5-wm2">
+                            <connections>
+                                <action selector="reloadAction:" destination="Sc5-VS-FgZ" id="Wl9-O5-sB6"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="collectionView" destination="GBE-ig-oxC" id="Gra-31-6RV"/>
                     </connections>
