@@ -5,7 +5,7 @@
 
 static const char MTCardLayoutHelperKey;
 
-@implementation UICollectionView(CardLayout)
+@implementation UICollectionView (CardLayout)
 
 - (MTCardLayoutHelper *)cardLayoutHelper {
     MTCardLayoutHelper *helper = objc_getAssociatedObject(self, &MTCardLayoutHelperKey);
@@ -87,6 +87,13 @@ static const char MTCardLayoutHelperKey;
 }
 
 - (void)selectAndNotifyDelegate:(NSIndexPath *)indexPath {
+    if (indexPath.section >= [self numberOfSections] ||
+        indexPath.item >= [self numberOfItemsInSection:indexPath.section]) {
+        // trying to select item not present in collection dataSource
+        [self setViewMode:MTCardLayoutViewModeDefault];
+        return;
+    }
+    
     [self selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
     if ([self.delegate respondsToSelector:@selector(collectionView:didSelectItemAtIndexPath:)]) {
         [self.delegate collectionView:self didSelectItemAtIndexPath:indexPath];

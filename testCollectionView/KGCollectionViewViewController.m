@@ -71,7 +71,13 @@ static NSString * const kHeaderId = @"header";
 }
 
 - (IBAction)reloadAction:(id)sender {
+    self.sections = (self.sections.count == 2 ? @[ @10, @15, @1, @25, @50, @1, @2, @3 ] : @[ @4, @6 ]);
+    NSIndexPath *selectedItem = [[self.collectionView indexPathsForSelectedItems] firstObject];
+    
     [self.collectionView reloadData];
+    if (selectedItem) {
+        [self.collectionView selectAndNotifyDelegate:selectedItem];
+    }
 }
 
 @end

@@ -183,6 +183,7 @@ typedef struct {
         NSIndexPath *selectedIndexPath = [[self.collectionView indexPathsForSelectedItems] firstObject];
         if (!selectedIndexPath) {
             NSLog(@"ERROR: there should be a selected path in MTCardLayoutViewModePresenting mode");
+            return @[];
         }
         
         if (selectedIndexPath.section == sectionIndex) {
@@ -251,13 +252,17 @@ typedef struct {
     NSIndexPath *selectedIndexPath = [[self.collectionView indexPathsForSelectedItems] firstObject];
     if (!selectedIndexPath) {
         NSLog(@"ERROR: there should be a selected path in MTCardLayoutViewModePresenting mode");
+        return @[];
     }
     
     NSMutableArray *cells = [[NSMutableArray alloc] init];
     NSInteger selectedSection = selectedIndexPath.section;
     
+    // frame for selected card
     [cells addObject:[self layoutAttributesForItemAtIndexPath:selectedIndexPath
                                                      viewMode:self.collectionView.viewMode]];
+    
+    // frames for bottom stack cards
     MTCardLayoutMetrics m = _metrics;
     NSInteger maxStackedCardIndex = m.maxStackedCards;
     
@@ -475,9 +480,12 @@ CGRect frameForSelectedCard(CGRect b, UIEdgeInsets contentInset, MTCardLayoutMet
     f.size.height = m.headerHeight + (cardsNum - 1) * m.visibleHeight + m.bottomCardVisibleHeight;
     
     if (sectionIndex <= 0) {
+        // first section does not have any vertical shift
+        self.sectionFramesCache[@(sectionIndex)] = [NSValue valueWithCGRect:f];
         return f;
     }
     
+    // calculating vertical shift for section
     CGRect previousSectionFrame = [self frameForSectionAtIndex:(sectionIndex - 1)];
     f.origin.y = previousSectionFrame.origin.y + previousSectionFrame.size.height;
     
